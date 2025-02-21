@@ -22,13 +22,10 @@ export default function ClarifyMD() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
-    // Convert FileList to an array
     const newFiles = Array.from(event.target.files);
-
-    // Add the new files to our existing file list
     setFiles((prev) => [...prev, ...newFiles]);
 
-    // We'll select the last newly uploaded file for immediate preview
+    // Select the last uploaded file for preview
     const lastFile = newFiles[newFiles.length - 1];
     if (lastFile) {
       setSelectedFile(lastFile);
@@ -38,19 +35,14 @@ export default function ClarifyMD() {
     // Summarize each newly uploaded file exactly once
     newFiles.forEach((file) => {
       if (!processedFiles.includes(file.name)) {
-        // Mark it processed immediately to prevent double-summarizing
         setProcessedFiles((prev) => [...prev, file.name]);
-
         setChat((prev) => [
           ...prev,
-          {
-            role: "ai",
-            message: `Processing document: ${file.name}...`,
-          },
+          { role: "ai", message: `Processing document: ${file.name}...` },
         ]);
         setLoading(true);
 
-        // Simulate an async summary
+        // Simulate async summary
         setTimeout(() => {
           setChat((prev) => [
             ...prev,
@@ -65,7 +57,6 @@ export default function ClarifyMD() {
     });
   };
 
-  // Switch displayed file without re-summarizing
   const handleFileSelection = (index: number) => {
     const file = files[index];
     setSelectedFile(file);
@@ -102,16 +93,23 @@ export default function ClarifyMD() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 overflow-hidden font-sans">
-      {/* HEADER - smaller than before */}
-      <header className="bg-gray-800 py-2 px-4 text-white text-xl font-semibold text-left shadow">
-        ClarifyMD
+      {/* HEADER with caduceus icon */}
+      <header className="bg-gray-800 py-2 px-4 text-white text-xl font-semibold shadow flex items-center gap-2">
+        {/* Icon from public/caduceus.svg */}
+        <Image
+          src="/caduceus.svg"
+          alt="Caduceus Icon"
+          width={24}
+          height={24}
+          priority
+        />
+        <span>ClarifyMD</span>
       </header>
 
       {/* MAIN CONTENT */}
       <div className="flex flex-1 gap-4 p-4 overflow-hidden">
         {/* LEFT PANEL: Document Upload & Preview */}
         <div className="w-1/2 flex flex-col rounded-lg bg-white border shadow-md p-4 min-h-0">
-          {/* Upload & File Selector */}
           <div className="mb-4">
             <label className="block bg-gray-200 text-gray-800 p-3 rounded-lg cursor-pointer text-center font-medium">
               Upload Document
@@ -137,7 +135,6 @@ export default function ClarifyMD() {
             )}
           </div>
 
-          {/* Preview Area */}
           <div className="flex-1 overflow-auto bg-gray-100 border rounded-lg p-3 min-h-0">
             {selectedFile ? (
               selectedFile.type.startsWith("image/") ? (
@@ -167,7 +164,6 @@ export default function ClarifyMD() {
 
         {/* RIGHT PANEL: Chat Interface */}
         <div className="w-1/2 flex flex-col rounded-lg bg-white border shadow-md p-4 min-h-0">
-          {/* Scrollable Chat Area */}
           <div
             ref={chatContainerRef}
             className="flex-1 overflow-y-auto bg-gray-50 p-4 rounded-lg min-h-0"
@@ -194,7 +190,6 @@ export default function ClarifyMD() {
             {loading && <p className="text-black">Loading...</p>}
           </div>
 
-          {/* Chat Input at Bottom */}
           <div className="mt-2 flex">
             <input
               type="text"
