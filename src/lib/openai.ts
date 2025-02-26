@@ -20,7 +20,7 @@ export async function getCompletion(
 		const fixedMessages = messages
 			.map((msg) => ({
 				role: msg.role === "ai" ? "assistant" : msg.role,
-				content: msg.message?.trim() || "No meaningful content provided.",
+				content: msg.content?.trim() || "No meaningful content provided.",
 			}))
 			.filter((msg) => msg.content.length > 0);
 

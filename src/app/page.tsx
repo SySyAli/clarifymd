@@ -115,7 +115,9 @@ export default function ClarifyMD() {
 				method: "POST",
 				body: JSON.stringify({
 					// Send only user and assistant messages (filtering out any system messages)
-					messages: chat.filter((msg) => msg.role !== "system"),
+					messages: [...chat, { role: "user", message: userMsg }].filter(
+						(msg) => msg.role !== "system"
+					),
 					fileSummary:
 						fileSummaries[selectedFile.name] || "No summary available.",
 				}),
